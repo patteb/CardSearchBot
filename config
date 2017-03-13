@@ -1,0 +1,9 @@
+[Query]
+max_pages = 1
+query = "Urza's Hot Tub"
+mci_query1 = "http://magiccards.info/query?q=%2B%2B"
+mci_query2 = "&v=scan&s=cname&p="
+
+[Matching]
+# total arbitrary number, switch with expected value
+likely_match = 700

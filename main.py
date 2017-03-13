@@ -4,6 +4,7 @@
 import time
 import serial
 import sys
+import configparser
 
 from os import remove
 from glob import glob
@@ -11,11 +12,14 @@ from glob import glob
 import matching
 import cardbot_serial
 
-# defaultvalues
-max_pages = 1
-query = "Urza's Hot Tub"
-# total arbitzryry number, switch with expected value
-likely_match = 700
+#load config
+config = configparser.ConfigParser()
+config.read("config")
+max_pages = config['Query']['max_pages']
+query = config['Query']['query']
+mci1 = config['Query']['mci_query1']
+mci2 = config['Query']['mci_query2']
+likely_match = config['Matching']['likely_match']
 
 # parsing inputparameters
 if len(sys.argv) < 2:
@@ -28,7 +32,8 @@ else:
 
 # resolving the query
 print("Querying the first " + str(max_pages) + " page(s) of \"" + query + "\" on Magiccards.info...")
-query_imgs = matching.card_query(query, max_pages)
+url = mci1 + query + mci2
+query_imgs = matching.card_query(url, max_pages)
 if query_imgs == 0:
     print("Search for \"" + query + "\" returned no results. Exiting.")
     quit()

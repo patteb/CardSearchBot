@@ -32,8 +32,8 @@ def cam_features(cam_img):
     return (kp_cam, des_cam)
 
 
-def card_query(query, max_pages):
-    qry = cardcrawler.crawler(query, max_pages)
+def card_query(url, max_pages):
+    qry = cardcrawler.crawler(url, max_pages)
     if qry != 0:
         results = list()
         for src in qry:

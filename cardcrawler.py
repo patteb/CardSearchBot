@@ -3,7 +3,7 @@ from urllib import urlretrieve
 from bs4 import BeautifulSoup
 
 
-def crawler(query, max_pages):
+def crawler(url, max_pages):
     page = 1
     j = 0
     # initializing the results as set, so links to images are saved only once
@@ -12,8 +12,7 @@ def crawler(query, max_pages):
     matches = set()
     while page <= max_pages:
         # get html source code
-        url = "http://magiccards.info/query?q=%2B%2B" + query + "&v=scan&s=cname&p=" + str(page)
-        page_src = requests.get(url)
+        page_src = requests.get(url + str(page))
         src_txt = page_src.text
         soup = BeautifulSoup(src_txt, "html.parser")
         # find all cardscans in source and list 'em in set "matches"
