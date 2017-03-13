@@ -1,5 +1,5 @@
+# coding=utf-8
 import serial
-
 
 # 1-char codes für die Übertragung
 # -----------------------------------

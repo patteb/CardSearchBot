@@ -1,3 +1,4 @@
+# coding: utf8
 import requests
 from urllib import urlretrieve
 from bs4 import BeautifulSoup
