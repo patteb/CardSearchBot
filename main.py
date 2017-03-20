@@ -12,8 +12,8 @@ import matching
 import cardbot_serial
 import configure
 
-#load config
-config=configure.configuration("config")
+# load config
+config = configure.configuration("config")
 config.read()
 
 # parsing inputparameters
@@ -25,7 +25,7 @@ else:
     if len(sys.argv) > 2:
         max_pages = sys.argv[2]
     else:
-        max_pages=config.max_pages
+        max_pages = config.max_pages
 
 # resolving the query
 print("Querying the first " + str(max_pages) + " page(s) of \"" + query + "\" on Magiccards.info...")
@@ -41,7 +41,7 @@ for file in glob(query + "*"):
     remove(file)
 
 # initialize serial connection to arduino
-serIF = cardbot_serial.init(config.serial_if,config.baudrate,config.timeout)
+serIF = cardbot_serial.init(config.serial_if, config.baudrate, config.timeout)
 
 # Enter container-mode
 while True:
@@ -59,5 +59,3 @@ while True:
 
     print("Sorting...")
     cardbot_serial.sort(matches > config.likely_match, serIF)
-
-

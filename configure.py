@@ -2,6 +2,7 @@
 
 import configparser
 
+
 class configuration(object):
     max_pages = 1
     mci1 = "http://magiccards.info/query?q=%2B%2B"
@@ -12,8 +13,8 @@ class configuration(object):
     baudrate = 9600
     timeout = 1
 
-    def __init__(self,file):
-        self.file=file
+    def __init__(self, file):
+        self.file = file
 
     def read(self):
         configparse = configparser.ConfigParser()
@@ -26,6 +27,3 @@ class configuration(object):
         self.serial_if = configparse['Serial']['serial_interface']
         self.baudrate = configparse['Serial']['baudrate']
         self.timeout = configparse['Serial']['timeout']
-
-
-

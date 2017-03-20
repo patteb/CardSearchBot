@@ -1,6 +1,7 @@
 # coding=utf-8
 import serial
 
+
 # 1-char codes for communication
 # -----------------------------------
 # sym - dir - translation
@@ -36,7 +37,7 @@ def feed(serIF):
     return
 
 
-def init(IF,bd,to):
+def init(IF, bd, to):
     return (serial.Serial(IF, bd, to))
 
 

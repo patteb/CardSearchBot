@@ -15,7 +15,7 @@ def query_features(query_img):
     return (kp_org, des_org)
 
 
-def cam_features_dummy(cam_img,cam_if):
+def cam_features_dummy(cam_img, cam_if):
     orb = cv2.ORB()
     cam = cv2.imread(cam_img)
     kp_cam, des_cam = orb.detectAndCompute(cam, None)
