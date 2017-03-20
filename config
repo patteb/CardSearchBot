@@ -1,8 +1,8 @@
 [Query]
+# make sure to substitute % with %% in the URL for mci_query1 and mci_query1
 max_pages = 1
-query = "Urza's Hot Tub"
-mci_query1 = "http://magiccards.info/query?q=%2B%2B"
-mci_query2 = "&v=scan&s=cname&p="
+mci_query1 = 'http://magiccards.info/query?q=%%2B%%2B'
+mci_query2 = '&v=scan&s=cname&p='
 
 [Matching]
 # total arbitrary number, switch with expected value
@@ -10,6 +10,6 @@ likely_match = 700
 cam_interface = 0
 
 [Serial]
-interface = '/dev/ttymxc0'
+serial_interface = '/dev/ttymxc0'
 baudrate = 9600
 timeout = 1
