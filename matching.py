@@ -15,15 +15,15 @@ def query_features(query_img):
     return (kp_org, des_org)
 
 
-def cam_features_dummy(cam_img):
+def cam_features_dummy(cam_img,cam_if):
     orb = cv2.ORB()
     cam = cv2.imread(cam_img)
     kp_cam, des_cam = orb.detectAndCompute(cam, None)
     return (kp_cam, des_cam)
 
 
-def cam_features(cam_img):
-    cam = cv2.VideoCapture(0)
+def cam_features(cam_img, cam_if):
+    cam = cv2.VideoCapture(cam_if)
     orb = cv2.ORB()
     s, img = cam.read()
     # imwrite("cam.jpg", img)

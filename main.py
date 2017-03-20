@@ -20,6 +20,7 @@ query = config['Query']['query']
 mci1 = config['Query']['mci_query1']
 mci2 = config['Query']['mci_query2']
 likely_match = config['Matching']['likely_match']
+cam_if = config['Matching']['cam_interface']
 serial_if = config['Serial']['interface']
 serial_baudrate = config['Serial']['baudrate']
 serial_timeout = config['Serial']['timeout']
@@ -57,7 +58,7 @@ while True:
 
     # Resolving the recorded image !!SIMULATED!!! drop "_dummy" 4 da real shit
     print("Finding features of card...")
-    kp_cam, des_cam = matching.cam_features_dummy("cam.jpg")
+    kp_cam, des_cam = matching.cam_features_dummy("cam.jpg", cam_if)
 
     print("Matching...")
     matches = matching.card_matching(des_qry, des_cam)
