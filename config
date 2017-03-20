@@ -7,3 +7,8 @@ mci_query2 = "&v=scan&s=cname&p="
 [Matching]
 # total arbitrary number, switch with expected value
 likely_match = 700
+
+[Serial]
+interface='/dev/ttymxc0'
+baudrate=9600
+timeout=1

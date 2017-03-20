@@ -1,7 +1,7 @@
 # coding=utf-8
 import serial
 
-# 1-char codes für die Übertragung
+# 1-char codes for communication
 # -----------------------------------
 # sym - dir - translation
 # -----------------------------------
@@ -13,7 +13,7 @@ import serial
 # y - in - positive confimation
 
 def query_feed(serIF):
-    # mockup: hier muss die Serielle Kommunication sein, die abfragt ob der schuber leer ist
+    # mockup: TODO: serial communication, polling if container is empty
     serIF.write('q')
     # "Is the container empty?"
     if serIF.read() == 'n':
@@ -36,8 +36,8 @@ def feed(serIF):
     return
 
 
-def init():
-    return (serial.Serial('/dev/ttymxc0', baudrate=9600, timeout=1))
+def init(IF,bd,to):
+    return (serial.Serial(IF, bd, to))
 
 
 def sort(match, serIF):

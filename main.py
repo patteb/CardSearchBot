@@ -20,6 +20,9 @@ query = config['Query']['query']
 mci1 = config['Query']['mci_query1']
 mci2 = config['Query']['mci_query2']
 likely_match = config['Matching']['likely_match']
+serial_if = config['Serial']['interface']
+serial_baudrate = config['Serial']['baudrate']
+serial_timeout = config['Serial']['timeout']
 
 # parsing inputparameters
 if len(sys.argv) < 2:
@@ -44,7 +47,7 @@ for file in glob(query + "*"):
     remove(file)
 
 # initialize serial connection to arduino
-serIF = cardbot_serial.init()
+serIF = cardbot_serial.init(serial_if,serial_baudrate,serial_timeout)
 
 # Enter container-mode
 while True:
