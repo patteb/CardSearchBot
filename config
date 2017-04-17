@@ -1,8 +1,8 @@
 [Query]
 # make sure to substitute % with %% in the URL for mci_query1 and mci_query1
 max_pages = 1
-mci_query1 = 'http://magiccards.info/query?q=%%2B%%2B'
-mci_query2 = '&v=scan&s=cname&p='
+mci_query1 = http://magiccards.info/query?q=%%2B%%2B
+mci_query2 = &v=scan&s=cname&p=
 
 [Matching]
 # total arbitrary number, switch with expected value

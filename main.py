@@ -23,9 +23,9 @@ if len(sys.argv) < 2:
 else:
     query = sys.argv[1]
     if len(sys.argv) > 2:
-        max_pages = sys.argv[2]
+        max_pages = int(sys.argv[2])
     else:
-        max_pages = config.max_pages
+        max_pages = int(config.max_pages)
 
 # resolving the query
 print("Querying the first " + str(max_pages) + " page(s) of \"" + query + "\" on Magiccards.info...")
@@ -37,7 +37,7 @@ if query_imgs == 0:
 print("Extracting features of query...")
 kp_qry, des_qry = matching.query_features(query_imgs)
 print("Deleting images...")
-for file in glob(query + "*"):
+for file in glob("*.jpg"):
     remove(file)
 
 # initialize serial connection to arduino

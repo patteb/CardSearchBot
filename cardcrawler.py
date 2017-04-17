@@ -28,7 +28,7 @@ def crawler(url, max_pages):
         files = list()
         for img_url in matches:
             # download image for every element in matches
-            img_file = query + str(i) + ".jpg"
+            img_file = str(i) + ".jpg"
             files.append(img_file)
             urlretrieve(img_url, img_file)
             print("\tImage " + str(i) + "/" + str(len(matches)) + " done.")
