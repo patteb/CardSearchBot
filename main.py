@@ -16,7 +16,7 @@ import configure
 config = configure.configuration("config")
 config.read()
 
-# parsing inputparameters
+# parsing input parameters
 if len(sys.argv) < 2:
     print "Please specify a query. Exiting."
     quit()
@@ -29,13 +29,17 @@ else:
 
 # resolving the query
 print("Querying the first " + str(max_pages) + " page(s) of \"" + query + "\" on Magiccards.info...")
+# constructing the url
 url = config.mci1 + query + config.mci2
+# Searching for cards, downloading images
 query_imgs = matching.card_query(url, max_pages)
 if query_imgs == 0:
     print("Search for \"" + query + "\" returned no results. Exiting.")
     quit()
 print("Extracting features of query...")
+# extracting features of all found cards
 kp_qry, des_qry = matching.query_features(query_imgs)
+# cleanup
 print("Deleting images...")
 for file in glob("*.jpg"):
     remove(file)

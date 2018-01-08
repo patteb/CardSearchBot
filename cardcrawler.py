@@ -4,6 +4,10 @@ from urllib import urlretrieve
 from bs4 import BeautifulSoup
 
 
+# run a query on maggiccards info and extract all card images
+# ---------------------------
+# IN: List of already imread() images
+# OUT: List of downloaded card image files
 def crawler(url, max_pages):
     page = 1
     j = 0
