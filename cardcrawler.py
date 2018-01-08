@@ -21,8 +21,9 @@ def crawler(url, max_pages):
         src_txt = page_src.text
         soup = BeautifulSoup(src_txt, "html.parser")
         # find all cardscans in source and list 'em in set "matches"
-        for image in soup.findAll("img", {"src": lambda L: L and L.startswith("http://magiccards.info/scans/")}):
-            matches.add(image.get("src"))
+        #for image in soup.findAll("img", {"src": lambda L: L and L.startswith("http://magiccards.info/scans/")}):
+        for image in soup.findAll("img", {"src": lambda L: L and L.startswith("/scans/")}):
+            matches.add("http://magiccards.info"+image.get("src"))
         page += 1
 
     if len(matches) != 0:
