@@ -4,8 +4,9 @@
 import time
 import serial
 import sys
+import os
 
-from os import remove
+# from os import remove
 from glob import glob
 
 import matching
@@ -31,6 +32,9 @@ else:
 print("Querying the first " + str(max_pages) + " page(s) of \"" + query + "\" on Magiccards.info...")
 # constructing the url
 url = config.mci1 + query + config.mci2
+# make tem,p-directory, if not existent
+if not os.path.exists("temp"):
+    os.makedirs("temp")
 # Searching for cards, downloading images
 query_imgs = matching.card_query(url, max_pages)
 if query_imgs == 0:
@@ -41,8 +45,8 @@ print("Extracting features of query...")
 kp_qry, des_qry = matching.query_features(query_imgs)
 # cleanup
 print("Deleting images...")
-for file in glob("*.jpg"):
-    remove(file)
+for file in glob("temp/*.jpg"):
+    os.remove(file)
 
 # initialize serial connection to arduino
 serIF = cardbot_serial.init(config)
