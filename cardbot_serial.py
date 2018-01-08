@@ -37,8 +37,8 @@ def feed(serIF):
     return
 
 
-def init(IF, bd, to):
-    return (serial.Serial(IF, bd, to))
+def init(config):
+    return (serial.Serial(config.serial_if, config.baudrate, config.timeout))
 
 
 def sort(match, serIF):

@@ -45,7 +45,7 @@ for file in glob("*.jpg"):
     remove(file)
 
 # initialize serial connection to arduino
-serIF = cardbot_serial.init(config.serial_if, config.baudrate, config.timeout)
+serIF = cardbot_serial.init(config)
 
 # Enter container-mode
 while True:
