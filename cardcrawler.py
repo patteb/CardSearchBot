@@ -17,13 +17,14 @@ def crawler(url, max_pages):
     matches = set()
     while page <= max_pages:
         # get html source code
-        page_src = requests.get(url + str(page))
+        page_src = requests.get(url)# + str(page))
         src_txt = page_src.text
         soup = BeautifulSoup(src_txt, "html.parser")
         # find all cardscans in source and list 'em in set "matches"
         # for image in soup.findAll("img", {"src": lambda L: L and L.startswith("http://magiccards.info/scans/")}):
-        for image in soup.findAll("img", {"src": lambda L: L and L.startswith("/scans/")}):
-            matches.add("http://magiccards.info" + image.get("src"))
+        for image in soup.findAll("img", {"src": lambda L: L and L.startswith("https://img.scryfall.com/")}):
+            print image.get("src")
+            matches.add(image.get("src"))
         page += 1
 
     if len(matches) != 0:

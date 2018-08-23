@@ -5,8 +5,9 @@ import configparser
 
 class configuration(object):
     max_pages = 1
-    mci1 = "http://magiccards.info/query?q=%2B%2B"
-    mci2 = "&v=scan&s=cname&p="
+    mci1 = "https: // scryfall.com / search?as=grid & order = released & q = \""
+    mci2 = "\"&unique=prints&as=grid"
+
     likely_match = 700
     cam_if = 0
     serial_if = '/dev/ttymxc0'

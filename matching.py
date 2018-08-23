@@ -1,6 +1,6 @@
 # coding=utf-8
-import cv2
 
+import cv2
 import cardcrawler
 
 
@@ -9,7 +9,7 @@ import cardcrawler
 # IN: List of already imread() images
 # OUT: List of Keypoints and descriptors of those images
 def query_features(query_img):
-    orb = cv2.ORB()
+    orb = cv2.ORB_create()
     kp_org = list()
     des_org = list()
     # for every card in the input list, extract Keypoints and descriptors and list them.
@@ -17,17 +17,17 @@ def query_features(query_img):
         kp, des = orb.detectAndCompute(src, None)
         kp_org.append(kp)
         des_org.append(des)
-    return (kp_org, des_org)
+    return kp_org, des_org
 
 
 # Dummy cam_features function, for testing purposes
 # ---------------------------
 # SEE cam_features
 def cam_features_dummy(cam_img, cam_if):
-    orb = cv2.ORB()
+    orb = cv2.ORB_create()
     cam = cv2.imread(cam_img)
     kp_cam, des_cam = orb.detectAndCompute(cam, None)
-    return (kp_cam, des_cam)
+    return kp_cam, des_cam
 
 
 # Taking an Image from the cam and find its Keypoints and Descriptors
@@ -43,7 +43,7 @@ def cam_features(cam_if):
     # extract Keypoints and descriptors if successful
     if s:
         kp_cam, des_cam = orb.detectAndCompute(img, None)
-    return (kp_cam, des_cam)
+    return kp_cam, des_cam
 
 
 # Search for cards and imread() their images
@@ -73,4 +73,4 @@ def card_matching(des_qry, des_cam):
         tmp_score = len(bf.match(des_cam, des))
         if tmp_score > score:
             score = tmp_score
-    return (score)
+    return score

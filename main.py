@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # coding=utf-8
 
+#TODO drop scryfall-crawler, use API instead
+
 import time
-import serial
+#import serial
 import sys
 import os
 
@@ -23,22 +25,24 @@ if len(sys.argv) < 2:
     quit()
 else:
     query = sys.argv[1]
+    query = query.replace(" ", "+") #for concating the url
     if len(sys.argv) > 2:
         max_pages = int(sys.argv[2])
     else:
         max_pages = int(config.max_pages)
 
 # resolving the query
-print("Querying the first " + str(max_pages) + " page(s) of \"" + query + "\" on Magiccards.info...")
+print("Querying the first " + str(max_pages) + " page(s) of \"" + query + "\" on scryfall")
 # constructing the url
 url = config.mci1 + query + config.mci2
+print url
 # make tem,p-directory, if not existent
 if not os.path.exists("temp"):
     os.makedirs("temp")
 # Searching for cards, downloading images
 query_imgs = matching.card_query(url, max_pages)
 if query_imgs == 0:
-    print("Search for \"" + query + "\" returned no results. Exiting.")
+    print("Search for \"" + query.replace("+"," ") + "\" returned no results. Exiting.")
     quit()
 print("Extracting features of query...")
 # extracting features of all found cards
