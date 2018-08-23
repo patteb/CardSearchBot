@@ -1,58 +1,30 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-import time
-import serial
-import sys
-import os
-
-# from os import remove
-from glob import glob
 
 import matching
+import setup
+import scryfall
 import cardbot_serial
-import configure
 
-# load config
-config = configure.configuration("config")
-config.read()
+query, max_pages, config, serIF = setup.init()
 
-# parsing input parameters
-if len(sys.argv) < 2:
-    print "Please specify a query. Exiting."
-    query = "urzas power plant"
-    max_pages = 1
-    # quit()
-else:
-    query = sys.argv[1]
-    query = query.replace(" ", "+")  # for concating the url
-    if len(sys.argv) > 2:
-        max_pages = int(sys.argv[2])
-    else:
-        max_pages = int(config.max_pages)
+url = scryfall.build_query(config.mci1, query)  # construct query url
+img_url = scryfall.crawler(url)  # API-Call
 
-# resolving the query
-print("Querying the first " + str(max_pages) + " page(s) of \"" + query + "\" on scryfall")
-# constructing the url
-url = config.mci1 + query.replace(" ", "+")
-# make temp-directory, if not existent
-if not os.path.exists("temp"):
-    os.makedirs("temp")
-# Searching for cards, downloading images
-query_imgs = matching.card_query(url, max_pages)
-if query_imgs == 0:
-    print("Search for \"" + query.replace("+", " ") + "\" returned no results. Exiting.")
+# check for 0 results
+if len(img_url) == 0:
+    print("Search for \"" + query + "\" returned no results. Exiting.")
     quit()
-print("Extracting features of query...")
-# extracting features of all found cards
-kp_qry, des_qry = matching.query_features(query_imgs)
-# cleanup
-print("Deleting images...")
-for file in glob("temp/*.jpg"):
-    os.remove(file)
 
-# initialize serial connection to arduino
-serIF = cardbot_serial.init(config)
+img_files = scryfall.card_download(img_url)  # download images
+query_imgs = matching.card_query(url)  # imread() downloaded images
+
+# extracting features of all found cards
+print("Extracting features of query...")
+kp_qry, des_qry = matching.query_features(query_imgs)
+
+setup.remove_temp()  # cleanup, delete card images
 
 # Enter container-mode
 while True:

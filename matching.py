@@ -49,10 +49,9 @@ def cam_features(cam_if):
 # Search for cards and imread() their images
 # both input parameters are only passed to a subfunction.
 # ---------------------------
-# IN: search query url, maximum number of pages to browse
+# IN: list of downloaded images
 # OUT: List of imread() card images.
-def card_query(url, max_pages):
-    qry = crawler(url)
+def card_query(qry):
     if qry != 0:
         results = list()
         for src in qry:
