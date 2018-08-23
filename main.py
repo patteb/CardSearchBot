@@ -2,12 +2,12 @@
 # coding=utf-8
 
 
-import matching
-import setup
-import scryfall
 import cardbot_serial
+import matching
+import scryfall
+import setup
 
-query, max_pages, config, serIF = setup.init()
+query, config, serIF = setup.init()
 
 url = scryfall.build_query(config.mci1, query)  # construct query url
 img_url = scryfall.crawler(url)  # API-Call

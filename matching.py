@@ -1,7 +1,6 @@
 # coding=utf-8
 
 import cv2
-from scryfall import crawler
 
 
 # Extracting features of a list of images
