@@ -1,8 +1,7 @@
 [Query]
 # make sure to substitute % with %% in the URL for mci_query1 and mci_query1
 max_pages = 1
-mci_query1 = https://scryfall.com/search?as=grid&order=released&q="
-mci_query2 = "&unique=prints&as=grid
+mci_query1 = https://api.scryfall.com/cards/search?unique=art&q=
 
 [Matching]
 # total arbitrary number, switch with expected value

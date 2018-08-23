@@ -1,7 +1,7 @@
 # coding=utf-8
 
 import cv2
-import cardcrawler
+from scryfall import crawler
 
 
 # Extracting features of a list of images
@@ -52,7 +52,7 @@ def cam_features(cam_if):
 # IN: search query url, maximum number of pages to browse
 # OUT: List of imread() card images.
 def card_query(url, max_pages):
-    qry = cardcrawler.crawler(url, max_pages)
+    qry = crawler(url)
     if qry != 0:
         results = list()
         for src in qry:

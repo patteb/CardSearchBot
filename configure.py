@@ -5,8 +5,7 @@ import configparser
 
 class configuration(object):
     max_pages = 1
-    mci1 = "https: // scryfall.com / search?as=grid & order = released & q = \""
-    mci2 = "\"&unique=prints&as=grid"
+    mci1 = "https://api.scryfall.com/cards/search?unique=art&q="
 
     likely_match = 700
     cam_if = 0
@@ -22,7 +21,6 @@ class configuration(object):
         configparse.read(self.file)
         self.max_pages = configparse['Query']['max_pages']
         self.mci1 = configparse['Query']['mci_query1']
-        self.mci2 = configparse['Query']['mci_query2']
         self.likely_match = configparse['Matching']['likely_match']
         self.cam_if = configparse['Matching']['cam_interface']
         self.serial_if = configparse['Serial']['serial_interface']
