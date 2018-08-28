@@ -13,19 +13,18 @@ import serial
 # n - in - negative confirmation
 # y - in - positive confirmation
 
-def query_feed(serIF):
+def query_feed(ser_if):
     # mockup: TODO: serial communication, polling if container is empty
-    serIF.write('q')
+    ser_if.write('q')
     # "Is the container empty?"
-    if serIF.read() == 'n':
+    if ser_if.read() == 'n':
         return False
     else:
         return True
 
 
-def feed(serIF):
-    while (query_feed(serIF)):  # true if empty
-        feed_continue = ""
+def feed(ser_if):
+    while query_feed(ser_if):  # true if empty
         try:
             feed_continue = raw_input("Card reservoir is empty, continue? [Y/n] > ")
         except SyntaxError:
@@ -33,7 +32,7 @@ def feed(serIF):
         if (feed_continue == "n") or (feed_continue == "N"):
             print("Goodbye then. Exiting.")
             quit()
-    serIF.write('f')
+    ser_if.write('f')
     return
 
 

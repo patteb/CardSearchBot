@@ -4,13 +4,37 @@ import os
 from glob import glob
 from sys import argv
 
+import configparser
+
 import cardbot_serial
-import configure
+
+
+class configuration(object):
+    url_pre = "https://api.scryfall.com/cards/search?unique=art&q="
+
+    likely_match = 700
+    cam_if = 0
+    serial_if = '/dev/ttymxc0'
+    baud = 9600
+    timeout = 1
+
+    def __init__(self, file):
+        self.file = file
+
+    def read(self):
+        config_parse = configparser.ConfigParser()
+        config_parse.read(self.file)
+        self.url_pre = config_parse['Query']['url_pre']
+        self.likely_match = config_parse['Matching']['likely_match']
+        self.cam_if = config_parse['Matching']['cam_interface']
+        self.serial_if = config_parse['Serial']['serial_interface']
+        self.baud = config_parse['Serial']['baud']
+        self.timeout = config_parse['Serial']['timeout']
 
 
 def init():
     # load config
-    config = configure.configuration("config")
+    config = configuration("config")
     config.read()
 
     # parsing input parameters

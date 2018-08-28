@@ -1,6 +1,6 @@
 [Query]
-# make sure to substitute % with %% in the URL for mci_query1
-mci_query1 = https://api.scryfall.com/cards/search?unique=art&q=
+# make sure to substitute % with %% in the URL
+url_pre = https://api.scryfall.com/cards/search?unique=art&q=
 
 [Matching]
 # total arbitrary number, switch with expected value
@@ -9,5 +9,5 @@ cam_interface = 0
 
 [Serial]
 serial_interface = '/dev/ttymxc0'
-baudrate = 9600
+baud = 9600
 timeout = 1

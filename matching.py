@@ -7,7 +7,7 @@ import cv2
 # ---------------------------
 # IN: List of already imread() images
 # OUT: List of Keypoints and descriptors of those images
-def query_features(query_img):
+def ref_features(query_img):
     orb = cv2.ORB_create()
     kp_org = list()
     des_org = list()
@@ -39,7 +39,7 @@ def cam_features(cam_if):
     orb = cv2.ORB()
     # take image
     s, img = cam.read()
-    # extract Keypoints and descriptors if successful
+    # extract keypoints and descriptors if successful
     if s:
         kp_cam, des_cam = orb.detectAndCompute(img, None)
     return kp_cam, des_cam
