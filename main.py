@@ -8,14 +8,8 @@ import scryfall
 import setup
 
 query, config, serIF = setup.init()
-
 url = scryfall.build_query(config.mci1, query)  # construct query url
-img_url = scryfall.crawler(url)  # API-Call
-
-# check for 0 results
-if len(img_url) == 0:
-    print("Search for \"" + query + "\" returned no results. Exiting.")
-    quit()
+img_url = scryfall.api_query(url)  # API-Call
 
 img_files = scryfall.card_download(img_url)  # download images
 query_imgs = matching.card_query(url)  # imread() downloaded images

@@ -25,12 +25,12 @@ def init():
         os.makedirs("temp")
 
     # initialize serial connection to arduino
-    serIF = cardbot_serial.init(config)
+    ser_if = cardbot_serial.init(config)
 
-    return query, config, serIF
+    return query, config, ser_if
 
 
 def remove_temp():
     print("Deleting images...")
-    for file in glob("temp/*.jpg"):
-        os.remove(file)
+    for i in glob("temp/*.jpg"):
+        os.remove(i)

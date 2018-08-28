@@ -11,16 +11,16 @@ import serial
 # m - out - match
 # c - out - no match ("chaff")
 # n - in - negative confirmation
-# y - in - positive confimation
+# y - in - positive confirmation
 
 def query_feed(serIF):
     # mockup: TODO: serial communication, polling if container is empty
     serIF.write('q')
     # "Is the container empty?"
     if serIF.read() == 'n':
-        return (False)
+        return False
     else:
-        return (True)
+        return True
 
 
 def feed(serIF):
@@ -38,13 +38,13 @@ def feed(serIF):
 
 
 def init(config):
-    return (serial.Serial(config.serial_if, config.baudrate, config.timeout))
+    return serial.Serial(config.serial_if, config.baudrate, config.timeout)
 
 
-def sort(match, serIF):
+def sort(match, ser_if):
     if match:
-        serIF.write('m')
+        ser_if.write('m')
     else:
-        serIF.write('c')
-    if serIF.read() == 'y':
+        ser_if.write('c')
+    if ser_if.read() == 'y':
         return
