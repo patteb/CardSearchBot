@@ -57,9 +57,10 @@ def card_download(matches):
             img_file = "temp/" + str(i) + ".jpg"
             files.append(img_file)
             urlretrieve(img_url, img_file)
-            print("\tImage " + str(i) + "/" + str(len(matches)) + " done.")
+            print("\r\tImage " + str(i) + "/" + str(len(matches))),  # trailing comma to omit newline
             i += 1
-            # return a list of file names
-            return files
+        # return a list of file names
+        print ("done.")
+        return files
     else:
         return 0
