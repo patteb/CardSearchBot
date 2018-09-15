@@ -33,6 +33,12 @@ class configuration(object):
 
 
 def init():
+    """Initialising any pre-existing conditions, like sys-argv or config file
+    ---------------
+    IN: void
+    OUT: the query to search for (as given via argv), a configuration-object and a serial-interface-object
+    TODO: handle multiple config files (argv -c)
+    """
     # load config
     config = configuration("config")
     config.read()
@@ -55,6 +61,7 @@ def init():
 
 
 def remove_temp():
+    """Removing downloaded jpg"""
     print("Deleting images...")
     for i in glob("temp/*.jpg"):
         os.remove(i)

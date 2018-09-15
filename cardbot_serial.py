@@ -2,7 +2,9 @@
 import serial
 
 
-# 1-char codes for communication
+# TODO: function docstrings
+
+#  1-char codes for communication
 # -----------------------------------
 # sym - dir - translation
 # -----------------------------------
@@ -17,7 +19,7 @@ def query_feed(ser_if):
     # mockup: TODO: serial communication, polling if container is empty
     ser_if.write('q')
     # "Is the container empty?"
-    if ser_if.read() == 'n':
+    if ser_if.readline() == 'n':
         return False
     else:
         return True
@@ -37,7 +39,8 @@ def feed(ser_if):
 
 
 def init(config):
-    return serial.Serial(config.serial_if, config.baudrate, config.timeout)
+    ser_if = serial.Serial(config.serial_if, config.baud, timeout=None)  # config.timeout)
+    return ser_if
 
 
 def sort(match, ser_if):

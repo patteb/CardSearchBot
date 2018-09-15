@@ -4,25 +4,23 @@ from json import load
 from urllib import urlopen, urlretrieve
 
 
-# Construct an url from the query
-# ---------------------------
-# IN: url-pre-snippet from config, query
-# OUT: url to hand of to crawler
-
 def build_query(pre, query):
+    """Construct an url from the query
+    ---------------------------
+    IN: url-pre-snippet from config, query
+    OUT: url to hand of to crawler"""
     print("Querying \"" + query + "\" on scryfall")
     url = pre + query.replace(" ", "+")  # replace necessary for url-handling
 
     return url
 
 
-# run a query on scryfall and extract all card images
-# API documentation @ https://scryfall.com/docs/api
-# ---------------------------
-# IN: url of query (including query)
-# OUT: List of image url
-
 def api_query(url):
+    """run a query on scryfall and extract all card images
+    API documentation @ https://scryfall.com/docs/api
+    ---------------------------
+    IN: url of query (including query)
+    OUT: List of image url"""
     # retrieving JSON data
     req = urlopen(url)
     data = load(req)
@@ -41,12 +39,11 @@ def api_query(url):
     return img_url
 
 
-# Download all card images from list, saving in temp-directory
-# ---------------------------
-# IN: list of image urls
-# OUT: list of image files
-
 def card_download(matches):
+    """"Download all card images from list, saving in temp-directory
+    ---------------------------
+    IN: list of image urls
+    OUT: list of image files"""
     if len(matches) != 0:  # check card url list for existing urls
         print(str(len(matches)) + " matches found.")
         print("Downloading images...")

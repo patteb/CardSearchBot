@@ -8,6 +8,8 @@ likely_match = 700
 cam_interface = 0
 
 [Serial]
-serial_interface = '/dev/ttymxc0'
+#serial_interface = /dev/ttymxc0
+serial_interface = COM4
+
 baud = 9600
-timeout = 1
+timeout = None
