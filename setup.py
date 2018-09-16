@@ -1,12 +1,15 @@
 # coding=utf-8
 
+import argparse
 import os
 from glob import glob
-from sys import argv
 
 import configparser
 
 import cardbot_serial
+
+
+# from sys import argv
 
 
 class configuration(object):
@@ -15,8 +18,8 @@ class configuration(object):
     likely_match = 700
     cam_if = 0
     serial_if = '/dev/ttymxc0'
-    baud = 9600
-    timeout = 1
+    baud = 115200
+    timeout = 3
 
     def __init__(self, file):
         self.file = file
@@ -37,19 +40,24 @@ def init():
     ---------------
     IN: void
     OUT: the query to search for (as given via argv), a configuration-object and a serial-interface-object
-    TODO: handle multiple config files (argv -c)
     """
-    # load config
-    config = configuration("config")
-    config.read()
 
     # parsing input parameters
-    if len(argv) < 2:
-        print "Please specify a query. Exiting."
-        query = "Urza's Hot Tub"
-        quit()
-    else:
-        query = argv[1]
+    parser = init_parse()
+    args = parser.parse_args()
+
+    # load config
+    config = configuration(args.config)
+    config.read()
+
+    query = args.search
+
+    # if len(argv) < 2:
+    #     print "Please specify a query. Exiting."
+    #     query = "Urza's Hot Tub"
+    #     quit()
+    # else:
+    #     query = argv[1]
 
     # make temp-directory for image files, if not existent
     if not os.path.exists("temp"):
@@ -66,3 +74,11 @@ def remove_temp():
     print("Deleting images...")
     for i in glob("temp/*.jpg"):
         os.remove(i)
+
+
+def init_parse():
+    parser = argparse.ArgumentParser(description='CardSearchBot. Search your cards.')
+    parser.add_argument('-s', '--search', default="Urza's Hot Tub", help="Name of the card to search for",
+                        required=True)
+    parser.add_argument('-c', '--config', default='config', help="Path to configuration file")
+    return parser
