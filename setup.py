@@ -29,7 +29,7 @@ class configuration(object):
         self.cam_if = config_parse['Matching']['cam_interface']
         self.serial_if = config_parse['Serial']['serial_interface']
         self.baud = config_parse['Serial']['baud']
-        self.timeout = config_parse['Serial']['timeout']
+        self.timeout = int(config_parse['Serial']['timeout'])
 
 
 def init():
@@ -46,7 +46,8 @@ def init():
     # parsing input parameters
     if len(argv) < 2:
         print "Please specify a query. Exiting."
-        quit()
+        query = "springleaf"
+        # quit()
     else:
         query = argv[1]
 

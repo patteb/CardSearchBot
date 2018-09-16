@@ -11,5 +11,5 @@ cam_interface = 0
 #serial_interface = /dev/ttymxc0
 serial_interface = COM4
 
-baud = 9600
-timeout = None
+baud = 115200
+timeout = 3
