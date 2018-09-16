@@ -46,8 +46,8 @@ def init():
     # parsing input parameters
     if len(argv) < 2:
         print "Please specify a query. Exiting."
-        query = "springleaf"
-        # quit()
+        query = "Urza's Hot Tub"
+        quit()
     else:
         query = argv[1]
 

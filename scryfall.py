@@ -3,6 +3,8 @@
 from json import load
 from urllib import urlopen, urlretrieve
 
+from tqdm import tqdm  # for progress bar
+
 
 def build_query(pre, query):
     """Construct an url from the query
@@ -49,15 +51,14 @@ def card_download(matches):
         print("Downloading images...")
         i = 1
         files = list()
-        for img_url in matches:  # iterating through the list, following each url
+        for img_url in tqdm(matches):  # iterating through the list, following each url. tqdm automates progress bar.
             # download image for every element in matches
             img_file = "temp/" + str(i) + ".jpg"
             files.append(img_file)
             urlretrieve(img_url, img_file)
-            print("\r\tImage " + str(i) + "/" + str(len(matches))),  # trailing comma to omit newline
+            # print("\r\tImage " + str(i) + "/" + str(len(matches))),  # trailing comma to omit newline
             i += 1
         # return a list of file names
-        print ("done.")
         return files
     else:
         return 0
