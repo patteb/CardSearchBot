@@ -14,7 +14,7 @@ import cardbot_serial
 
 class configuration(object):
     url_pre = "https://api.scryfall.com/cards/search?unique=art&q="
-
+    path = "temp"
     likely_match = 700
     cam_if = 0
     serial_if = '/dev/ttymxc0'
@@ -28,6 +28,7 @@ class configuration(object):
         config_parse = configparser.ConfigParser()
         config_parse.read(self.file)
         self.url_pre = config_parse['Query']['url_pre']
+        self.path = config_parse['Query']['path']
         self.likely_match = config_parse['Matching']['likely_match']
         self.cam_if = config_parse['Matching']['cam_interface']
         self.serial_if = config_parse['Serial']['serial_interface']
@@ -52,16 +53,9 @@ def init():
 
     query = args.search
 
-    # if len(argv) < 2:
-    #     print "Please specify a query. Exiting."
-    #     query = "Urza's Hot Tub"
-    #     quit()
-    # else:
-    #     query = argv[1]
-
     # make temp-directory for image files, if not existent
-    if not os.path.exists("temp"):
-        os.makedirs("temp")
+    if not os.path.exists(config.path):
+        os.makedirs(config.path)
 
     # initialize serial connection to arduino
     ser_if = cardbot_serial.init(config)
@@ -69,14 +63,15 @@ def init():
     return query, config, ser_if
 
 
-def remove_temp():
+def remove_temp(path):
     """Removing downloaded jpg"""
     print("Deleting images...")
-    for i in glob("temp/*.jpg"):
+    for i in glob(path + "/*.jpg"):
         os.remove(i)
 
 
 def init_parse():
+    """ Initialising command-line parser, adding command line options"""
     parser = argparse.ArgumentParser(description='CardSearchBot. Search your cards.')
     parser.add_argument('-s', '--search', default="Urza's Hot Tub", help="Name of the card to search for",
                         required=True)

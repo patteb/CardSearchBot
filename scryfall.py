@@ -3,18 +3,14 @@
 from json import load
 from urllib import urlopen, urlretrieve
 
-from tqdm import tqdm  # for progress bar
-
 
 def build_query(pre, query):
     """Construct an url from the query
     ---------------------------
     IN: url-pre-snippet from config, query
     OUT: url to hand of to crawler"""
-    print("Querying \"" + query + "\" on scryfall")
-    url = pre + query.replace(" ", "+")  # replace necessary for url-handling
-
-    return url
+    print("Querying \"" + query + "\" on scryfall."),
+    return pre + query.replace(" ", "+")  # replace necessary for url-handling
 
 
 def api_query(url):
@@ -51,14 +47,25 @@ def card_download(matches):
         print("Downloading images...")
         i = 1
         files = list()
-        for img_url in tqdm(matches):  # iterating through the list, following each url. tqdm automates progress bar.
+        for img_url in matches:  # iterating through the list, following each url.
             # download image for every element in matches
             img_file = "temp/" + str(i) + ".jpg"
             files.append(img_file)
             urlretrieve(img_url, img_file)
-            # print("\r\tImage " + str(i) + "/" + str(len(matches))),  # trailing comma to omit newline
+            print("\r\tImage " + str(i) + "/" + str(len(matches))),  # trailing comma to omit newline
             i += 1
         # return a list of file names
+        print "done!"
         return files
     else:
         return 0
+
+
+def scryfall(url_pre, query):
+    """Combine function to build query, do the API-call and download images
+    ---------------------------
+    IN: url-pre-snippet from config, query
+    OUT: list of image files"""
+    url = build_query(url_pre, query)  # construct query url
+    img_url = api_query(url)  # API-Call
+    return card_download(img_url)  # download images

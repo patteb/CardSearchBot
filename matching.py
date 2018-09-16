@@ -8,14 +8,19 @@ def ref_features(query_img):
     ---------------------------
     IN: List of already imread() images
     OUT: List of Keypoints and descriptors of those images"""
+    print("Extracting features of references...")
     orb = cv2.ORB_create()
     kp_org = list()
     des_org = list()
+    i = 1
     # for every card in the input list, extract Keypoints and descriptors and list them.
     for src in query_img:
         kp, des = orb.detectAndCompute(src, None)
         kp_org.append(kp)
         des_org.append(des)
+        print("\r\tImage " + str(i) + "/" + str(len(query_img))),  # trailing comma to omit newline
+        i += 1
+    print "done!"
     return kp_org, des_org
 
 

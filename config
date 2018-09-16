@@ -1,6 +1,7 @@
 [Query]
 # make sure to substitute % with %% in the URL
 url_pre = https://api.scryfall.com/cards/search?unique=art&q=
+path = temp
 
 [Matching]
 # total arbitrary number, switch with expected value
