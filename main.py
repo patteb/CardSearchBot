@@ -13,6 +13,7 @@ img_files = scryfall(config.url_pre, query)  # API-call, download images
 cv_img = matching.card_query(img_files)  # imread() downloaded images
 
 # extracting features of all found cards ("ref" as in reference)
+print("Extracting features of references...")
 kp_ref, des_ref = matching.ref_features(cv_img)
 
 setup.remove_temp(config.path)  # cleanup, delete card images

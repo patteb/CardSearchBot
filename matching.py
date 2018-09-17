@@ -8,7 +8,7 @@ def ref_features(query_img):
     ---------------------------
     IN: List of already imread() images
     OUT: List of Keypoints and descriptors of those images"""
-    print("Extracting features of references...")
+
     orb = cv2.ORB_create()
     kp_org = list()
     des_org = list()
