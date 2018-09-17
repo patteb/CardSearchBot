@@ -9,9 +9,9 @@ void setup() {
   feeder_servo.attach(FEED_PIN);
   sort_servo.attach(SORT_PIN);
 
-  pinMode(CAM_PIN,INPUT);
-  pinMode(CONTAINER_PIN,INPUT);
-  
+  pinMode(CAM_PIN, INPUT);
+  pinMode(CONTAINER_PIN, INPUT);
+
   pinMode(13, OUTPUT);
   pinMode(2, INPUT);
 }
