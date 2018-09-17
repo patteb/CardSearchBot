@@ -1,51 +1,44 @@
 #include <Servo.h>
+#include "CardSearchBot.h"
 
-//PINOUT is a mockup
-#define FEED 1
-#define SORT 2
-#define DETECT 3
-
-#define BAUDRATE 115200
+Servo feeder_servo, sort_servo;
 
 void setup() {
   Serial.begin(BAUDRATE);
+
+  feeder_servo.attach(FEED_PIN);
+  sort_servo.attach(SORT_PIN);
+
+  pinMode(CAM_PIN,INPUT);
+  pinMode(CONTAINER_PIN,INPUT);
+  
   pinMode(13, OUTPUT);
   pinMode(2, INPUT);
 }
 
 void loop() {
-  char incomingByte = 'n';
+  char incomingByte = SERIAL_NEGATIVE;
   boolean response = false;
-  /* 1-char codes for communication
-  ** -----------------------------------
-  ** sym - dir - translation
-  ** -----------------------------------
-  ** f - in - feed new card
-  ** q - in - query state of container
-  ** m - in - match
-  ** c - in - no match ("chaff")
-  ** n - out - negative confirmation
-  ** y - out - positive confirmation
-  */
+
   Serial.flush();
   if (Serial.available() > 0) {
     incomingByte = Serial.read();
     switch (incomingByte) {
-      case 'f': //feed card
+      case SERIAL_FEED: //feed card
         response = true;
         break;
-      case 'q': //query state of container
+      case SERIAL_QUERY: //query state of container
         response = dummy();
         break;
-      case 'm': //match
+      case SERIAL_MATCH: //match
         response = true;
         break;
-      case 'c': //no match
+      case SERIAL_NO_MATCH: //no match
         response = true;
         break;
     }
-    if (response) Serial.print('y');
-    else Serial.print('n');
+    if (response) Serial.print(SERIAL_POSITIVE);
+    else Serial.print(SERIAL_NEGATIVE);
   }
 }
 
