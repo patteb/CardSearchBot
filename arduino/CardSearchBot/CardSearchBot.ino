@@ -6,12 +6,13 @@ Servo feeder_servo, sort_servo;
 void setup() {
   Serial.begin(BAUDRATE);
 
-  feeder_servo.attach(FEED_PIN);
   sort_servo.attach(SORT_PIN);
+  sort_servo.write(SORT_NEUTRAL);
 
   pinMode(CAM_PIN, INPUT);
   pinMode(CONTAINER_PIN, INPUT);
 
+  //PINMODDES for debugging button
   pinMode(13, OUTPUT);
   pinMode(2, INPUT);
 }
@@ -25,16 +26,20 @@ void loop() {
     incomingByte = Serial.read();
     switch (incomingByte) {
       case SERIAL_FEED: //feed card
-        response = true;
+        response = feed();
         break;
       case SERIAL_QUERY: //query state of container
         response = dummy();
+        //response = check_empty();
         break;
       case SERIAL_MATCH: //match
         response = true;
+        //response = sort(true);
         break;
       case SERIAL_NO_MATCH: //no match
+        //delay(500);
         response = true;
+        //response = sort(false);
         break;
     }
     if (response) Serial.print(SERIAL_POSITIVE);
@@ -43,9 +48,46 @@ void loop() {
 }
 
 boolean dummy() {
-  if (digitalRead(2)) return true;
+  if (digitalRead(2)) return false;
+  else return true;
+}
+
+boolean feed() {
+  if (!(check_empty())) return false;
+  else {
+    feeder_servo.attach(FEED_PIN);
+    feeder_servo.write(FEEDER_SPEED);
+    delay(550);//MOCKUP for CNY70-Check
+    //while (!(check_cam())) delay(20);
+    feeder_servo.detach();
+    return true;
+  }
+}
+
+boolean check_empty() {
+  if (digitalRead(CONTAINER_PIN)) return true;
   else return false;
 }
+
+boolean sort(boolean match) {
+  if (match) sort_servo.write(SORT_MATCH);
+  else sort_servo.write(SORT_CHAFF);
+
+  while (check_cam()) delay(20);
+  delay(100);
+  sort_servo.write(SORT_NEUTRAL);
+  return true;
+}
+
+boolean check_cam() {
+  float sensorValue = 0;
+  for (int i = 0; i < 10; i++) sensorValue += analogRead(CAM_PIN);
+  sensorValue /= 10;
+  if (sensorValue <= CNY70_LVL) return true;
+  else return false;
+}
+
+
 
 
 
