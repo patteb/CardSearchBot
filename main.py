@@ -18,6 +18,7 @@ kp_ref, des_ref = matching.ref_features(cv_img)
 
 setup.remove_temp(config.path)  # cleanup, delete card images
 
+matches_found = 0
 # Enter container-mode
 while True:
     # Feed the first card
@@ -36,6 +37,11 @@ while True:
 
     print("Sorting...")
     if cardbot_serial.sort(img_match > config.likely_match, ser_if):
+        if (img_match > config.likely_match) and (config.max_matches is not None):
+            matches_found += 1
+            if (matches_found >= config.max_matches):
+                print ("Maximum matching cards found. " + str(matches_found) + " matching cards found. Exiting.")
+                quit()
         continue
     else:
         print "Sorting Error! Exiting"

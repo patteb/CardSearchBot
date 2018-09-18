@@ -20,6 +20,7 @@ class configuration(object):
     serial_if = '/dev/ttymxc0'
     baud = 115200
     timeout = 3
+    max_matches = None
 
     def __init__(self, file):
         self.file = file
@@ -34,6 +35,7 @@ class configuration(object):
         self.serial_if = config_parse['Serial']['serial_interface']
         self.baud = config_parse['Serial']['baud']
         self.timeout = int(config_parse['Serial']['timeout'])
+        self.max_matches = None
 
 
 def init():
@@ -52,6 +54,8 @@ def init():
     config.read()
 
     query = args.search
+    if args.matches is not None:
+        config.max_matches = int(args.matches)
 
     # make temp-directory for image files, if not existent
     if not os.path.exists(config.path):
@@ -76,4 +80,6 @@ def init_parse():
     parser.add_argument('-s', '--search', default="Urza's Hot Tub", help="Name of the card to search for",
                         required=True)
     parser.add_argument('-c', '--config', default='config', help="Path to configuration file")
+    parser.add_argument('-m', '--matches', help="Stop after n matches")
+
     return parser
