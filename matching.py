@@ -1,81 +1,83 @@
-# coding=utf-8
-
 import cv2
+import imutils
+import numpy as np
 
 
-def ref_features(query_img):
-    """Extracting features of a list of images
-    ---------------------------
-    IN: List of already imread() images
-    OUT: List of Keypoints and descriptors of those images"""
-
-    orb = cv2.ORB_create()
-    kp_org = list()
-    des_org = list()
-    i = 1
-    # for every card in the input list, extract Keypoints and descriptors and list them.
-    for src in query_img:
-        kp, des = orb.detectAndCompute(src, None)
-        kp_org.append(kp)
-        des_org.append(des)
-        print("\r\tImage " + str(i) + "/" + str(len(query_img))),  # trailing comma to omit newline
-        i += 1
-    print "done!"
-    return kp_org, des_org
-
-
-def cam_features_dummy(cam_img, cam_if):
-    """Dummy cam_features function, for testing purposes
-    ---------------------------
-    SEE cam_features"""
-    orb = cv2.ORB_create()
-    cam = cv2.imread(cam_img)
-    kp_cam, des_cam = orb.detectAndCompute(cam, None)
-    return kp_cam, des_cam
-
-
-def cam_features(cam_if):
-    """Taking an Image from the cam and find its Keypoints and Descriptors
-    ---------------------------
-    IN: Camera interface (from config-file)
-    OUT: Keypoints and Descriptors of taken image"""
-    # Create camera and feature detection object
-    cam = cv2.VideoCapture(cam_if)
-    orb = cv2.ORB()
-    # take image
-    s, img = cam.read()
-    # extract keypoints and descriptors if successful
-    if s:
-        kp_cam, des_cam = orb.detectAndCompute(img, None)
-        return kp_cam, des_cam
-    else:
-        return -1
-
-
-def card_query(qry):
-    """" Search for cards and imread() their images
+def ref_prepare(qry):  # TODO: 180deg Rotation
+    """
+    Search for cards and imread() their images, rotate them, find edges
     both input parameters are only passed to a subfunction.
-    ---------------------------
-    IN: list of downloaded images
-    OUT: List of imread() card images."""
+    Replaces: card_query(qry)
+    -------------------------------------------------------
+    :param qry: list of downloaded images
+    :return: list of prepared reference images
+    """
     if qry != 0:
         results = list()
         for src in qry:
-            results.append(cv2.imread(src))
+            template = cv2.imread(src, 0)
+            template = imutils.rotate_bound(template, -90)
+            template = cv2.Canny(template, 50, 200)
+            results.append(imutils.resize(template, width=int(template.shape[1] * .5)))
         return results
     else:
         return 0
 
 
-def card_matching(des_qry, des_cam):
-    """Feature match webcam-image against features of every card in query
-    ---------------------------
-    IN: Descriptors of query and camera
-    OUT: maximum feature match score"""
+def resize_match(reference, cam):
+    """
+    Match template by resizing cam-image. This is done to find best match if references and cam-image are not same size.
+    :param reference: list of prepared images ( see ref_prepare)
+    :param cam: prepared image from camera
+    :return: matching score
+    """
+    (tH, tW) = reference.shape[:2]
+    found = None
+
+    for scale in np.linspace(0.2, 1.0, 20)[::-1]:
+        resized = imutils.resize(cam, width=int(cam.shape[1] * scale))
+        r = cam.shape[1] / float(resized.shape[1])
+        if resized.shape[0] < tH or resized.shape[1] < tW:
+            break
+
+        # detect edges in the resized, grayscale image and apply template
+        # matching to find the template in the image
+        edged = cv2.Canny(resized, 50, 200)
+        result = cv2.matchTemplate(edged, reference, cv2.TM_CCOEFF)
+        (_, maxVal, _, maxLoc) = cv2.minMaxLoc(result)
+
+        # if we have found a new maximum correlation value, then ipdate
+        # the bookkeeping variable
+        if found is None or maxVal > found[0]:
+            found = (maxVal, maxLoc, r)
+
+    return int(maxVal / 1000000)
+
+
+def cam_prepare(cam_if):
+    """Taking an Image from the cam and prepare for matching
+    --------------------------------------
+    :param cam_if: Camera interface, see config
+    :return: prepared image
+    """
+    # Create camera and feature detection object
+    cam = cv2.VideoCapture(int(cam_if))
+    s, img = cam.read()
+    if s:
+        return cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # grey colorscale
+    else:
+        return -1
+
+
+def card_matching(ref, cam):
+    """Template match webcam-image against every card in query
+    :param ref: list of prepared reference-images
+    :param cam: prepared camera-image
+    :return: Maximum score
+    """
     score = 0
-    bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
-    for des in des_qry:
-        tmp_score = len(bf.match(des_cam, des))
+    for ref_image in ref:
+        tmp_score = resize_match(ref_image, cam)
         if tmp_score > score:
             score = tmp_score
     return score

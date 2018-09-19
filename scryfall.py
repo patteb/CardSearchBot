@@ -32,7 +32,8 @@ def api_query(url):
     # extracting Image-URL from JSON
     img_url = set()
     for i in range(0, data['total_cards']):
-        img_url.add(data['data'][i]['image_uris']['png'])
+        # img_url.add(data['data'][i]['image_uris']['png'])
+        img_url.add(data['data'][i]['image_uris']['large'])
 
     return img_url
 

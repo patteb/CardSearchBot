@@ -77,8 +77,9 @@ def remove_temp(path):
 def init_parse():
     """ Initialising command-line parser, adding command line options"""
     parser = argparse.ArgumentParser(description='CardSearchBot. Search your cards.')
-    parser.add_argument('-s', '--search', default="Urza's Hot Tub", help="Name of the card to search for",
-                        required=True)
+    parser.add_argument('-s', '--search', default="Dream Stalker", help="Name of the card to search for")
+    # parser.add_argument('-s', '--search', default="Urza's Hot Tub", help="Name of the card to search for",
+    # required=True)
     parser.add_argument('-c', '--config', default='config', help="Path to configuration file")
     parser.add_argument('-m', '--matches', help="Stop after n matches")
 
