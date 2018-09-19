@@ -2,7 +2,7 @@
 #define FEED_PIN 9
 #define SORT_PIN 2
 #define CAM_PIN A0
-#define CONTAINER_PIN 2
+#define CONTAINER_PIN 8
 
 #define BAUDRATE 115200
 #define CNY70_LVL 512

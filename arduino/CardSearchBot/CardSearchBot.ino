@@ -11,10 +11,6 @@ void setup() {
 
   pinMode(CAM_PIN, INPUT);
   pinMode(CONTAINER_PIN, INPUT);
-
-  //PINMODDES for debugging button
-  pinMode(13, OUTPUT);
-  pinMode(2, INPUT);
 }
 
 void loop() {
@@ -48,7 +44,7 @@ void loop() {
 }
 
 boolean dummy() {
-  if (digitalRead(2)) return false;
+  if (digitalRead(CONTAINER_PIN)) return false;
   else return true;
 }
 
