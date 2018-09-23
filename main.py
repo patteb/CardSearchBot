@@ -2,6 +2,8 @@
 # coding=utf-8
 
 
+from time import sleep
+
 import cardbot_serial
 import matching
 import setup
@@ -21,14 +23,15 @@ while True:
     print("Feeding next card."),
     if cardbot_serial.feed(ser_if):
         # Resolving the recorded image !!SIMULATED!!! drop "_dummy" 4 da real shit
+        sleep(1)
         print("Taking Picture."),
         cam_img = matching.cam_prepare(config.cam_if)
         print("Matching."),
         img_match = matching.card_matching(cv_img, cam_img)
-        print("Score is " + str(img_match) + "."),
+        print("Score is %s." % img_match),
         if img_match > config.likely_match:
             matches_found += 1
-            print ("Match #" + str(matches_found) + " found!"),
+            print ("Match #%s found!" % matches_found),
     else:
         print "\nFeeding Error! Exiting."
         quit()
@@ -37,9 +40,10 @@ while True:
     if cardbot_serial.sort(img_match > config.likely_match, ser_if):
         if (img_match > config.likely_match) and (config.max_matches is not None):
             if matches_found >= config.max_matches:
-                print ("Maximum matching cards found. " + str(matches_found) + " matching cards found. Exiting.")
+                print ("Maximum matching cards found. %s matching cards found. Exiting." % matches_found)
                 quit()
         continue
+        sleep(1)
     else:
         print "Sorting Error! Exiting"
         quit()

@@ -30,8 +30,8 @@ class configuration(object):
         config_parse.read(self.file)
         self.url_pre = config_parse['Query']['url_pre']
         self.path = config_parse['Query']['path']
-        self.likely_match = config_parse['Matching']['likely_match']
-        self.cam_if = config_parse['Matching']['cam_interface']
+        self.likely_match = int(config_parse['Matching']['likely_match'])
+        self.cam_if = int(config_parse['Matching']['cam_interface'])
         self.serial_if = config_parse['Serial']['serial_interface']
         self.baud = config_parse['Serial']['baud']
         self.timeout = int(config_parse['Serial']['timeout'])

@@ -13,13 +13,14 @@ def ref_prepare(qry):  # TODO: 180deg Rotation
     :return: list of prepared reference images
     """
     if qry != 0:
-        results = list()
+        retval = list()
         for src in qry:
-            template = cv2.imread(src, 0)
-            template = imutils.rotate_bound(template, -90)
-            template = cv2.Canny(template, 50, 200)
-            results.append(imutils.resize(template, width=int(template.shape[1] * .5)))
-        return results
+            gray = cv2.imread(src, 0)
+            gray_rot = imutils.rotate_bound(gray, -90)
+            blur = cv2.GaussianBlur(gray_rot, (5, 5), 0)
+            blur_canny = cv2.Canny(blur, 50, 200)
+            retval.append(imutils.resize(blur_canny, width=int(blur_canny.shape[1] * .5)))
+        return retval
     else:
         return 0
 
@@ -46,7 +47,7 @@ def resize_match(reference, cam):
         result = cv2.matchTemplate(edged, reference, cv2.TM_CCOEFF)
         (_, maxVal, _, maxLoc) = cv2.minMaxLoc(result)
 
-        # if we have found a new maximum correlation value, then ipdate
+        # if we have found a new maximum correlation value, then update
         # the bookkeeping variable
         if found is None or maxVal > found[0]:
             found = (maxVal, maxLoc, r)
@@ -61,10 +62,13 @@ def cam_prepare(cam_if):
     :return: prepared image
     """
     # Create camera and feature detection object
-    cam = cv2.VideoCapture(int(cam_if))
+    cam = cv2.VideoCapture(cam_if)
     s, img = cam.read()
     if s:
-        return cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # grey colorscale
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # grey colorscale
+        blur = cv2.GaussianBlur(gray, (5, 5), 0)
+        retval = cv2.Canny(blur, 50, 200)
+        return retval
     else:
         return -1
 

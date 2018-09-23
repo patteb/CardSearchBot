@@ -9,7 +9,7 @@ def build_query(pre, query):
     ---------------------------
     IN: url-pre-snippet from config, query
     OUT: url to hand of to crawler"""
-    print("Querying \"" + query + "\" on scryfall."),
+    print("Querying \"%s\" on scryfall." % query),
     return pre + query.replace(" ", "+")  # replace necessary for url-handling
 
 
@@ -25,14 +25,14 @@ def api_query(url):
 
     # check for 0 results
     if data['object'] == 'error':
-        print("Error: " + data['details'])
+        print("Error: %s" % data['details'])
         print("Exiting.")
         quit()
 
     # extracting Image-URL from JSON
     img_url = set()
     for i in range(0, data['total_cards']):
-        # img_url.add(data['data'][i]['image_uris']['png'])
+        # img_url.add(data['data'][i]['image_uris']['art_crop'])
         img_url.add(data['data'][i]['image_uris']['large'])
 
     return img_url
@@ -44,16 +44,16 @@ def card_download(matches):
     IN: list of image urls
     OUT: list of image files"""
     if len(matches) != 0:  # check card url list for existing urls
-        print(str(len(matches)) + " matches found.")
+        print("%s matches found." % len(matches))
         print("Downloading images...")
         i = 1
         files = list()
         for img_url in matches:  # iterating through the list, following each url.
             # download image for every element in matches
-            img_file = "temp/" + str(i) + ".jpg"
+            img_file = "temp/%s.jpg" % i
             files.append(img_file)
             urlretrieve(img_url, img_file)
-            print("\r\tImage " + str(i) + "/" + str(len(matches))),  # trailing comma to omit newline
+            print("\r\tImage %s/%s" % (i, len(matches))),  # trailing comma to omit newline
             i += 1
         # return a list of file names
         print "done!"
