@@ -1,16 +1,16 @@
 //PINOUT is a mockup/subject to change
-#define FEED_PIN 9
-#define SORT_PIN 2
+#define FEED_PIN 10
+#define SORT_PIN 11
 #define CAM_PIN A0
-#define CONTAINER_PIN 8
+#define CONTAINER_PIN 12
 
 #define BAUDRATE 115200
 #define CNY70_LVL 512
 #define FEEDER_SPEED 180 //86..180
 
-#define SORT_CHAFF 45
-#define SORT_MATCH 135
-#define SORT_NEUTRAL 90
+#define SORT_CHAFF 30
+#define SORT_MATCH 150
+#define SORT_NEUTRAL 83
 
 /* 1-char codes for communication
 ** -----------------------------------

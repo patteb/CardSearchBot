@@ -25,17 +25,15 @@ void loop() {
         response = feed();
         break;
       case SERIAL_QUERY: //query state of container
-        response = dummy();
-        //response = check_empty();
+        response = check_empty();
         break;
       case SERIAL_MATCH: //match
         response = true;
-        //response = sort(true);
+        response = sort(true);
         break;
       case SERIAL_NO_MATCH: //no match
-        //delay(500);
         response = true;
-        //response = sort(false);
+        response = sort(false);
         break;
     }
     if (response) Serial.print(SERIAL_POSITIVE);
@@ -53,8 +51,8 @@ boolean feed() {
   else {
     feeder_servo.attach(FEED_PIN);
     feeder_servo.write(FEEDER_SPEED);
-    delay(550);//MOCKUP for CNY70-Check
-    //while (!(check_cam())) delay(20);
+    //delay(550);//MOCKUP for CNY70-Check
+    while (!(check_cam())) delay(20);
     feeder_servo.detach();
     return true;
   }
@@ -70,7 +68,7 @@ boolean sort(boolean match) {
   else sort_servo.write(SORT_CHAFF);
 
   while (check_cam()) delay(20);
-  delay(100);
+  delay(150);
   sort_servo.write(SORT_NEUTRAL);
   return true;
 }
