@@ -15,44 +15,33 @@ def ref_prepare(qry):  # TODO: 180deg Rotation
     if qry != 0:
         retval = list()
         for src in qry:
-            gray = cv2.imread(src, 0)
-            gray_rot = imutils.rotate_bound(gray, -90)
-            blur = cv2.GaussianBlur(gray_rot, (5, 5), 0)
-            blur_canny = cv2.Canny(blur, 50, 200)
-            retval.append(imutils.resize(blur_canny, width=int(blur_canny.shape[1] * .5)))
+            ref = cv2.imread(src)
+            ref_rot = imutils.rotate_bound(ref, -90)
+            ref_resize = imutils.resize(ref_rot, width=int(ref_rot.shape[0] * .41), height=int(ref_rot.shape[1] * .41))
+            ref_pre = preprocess_image(ref_resize)
+            retval.append(ref_pre)
         return retval
     else:
         return 0
 
 
-def resize_match(reference, cam):
-    """
-    Match template by resizing cam-image. This is done to find best match if references and cam-image are not same size.
-    :param reference: list of prepared images ( see ref_prepare)
-    :param cam: prepared image from camera
-    :return: matching score
-    """
-    (tH, tW) = reference.shape[:2]
-    found = None
+def ref_features(query_img):
+    """Extracting features of a list of images
+    ---------------------------
+    IN: List of already imread() images
+    OUT: List of Keypoints and descriptors of those images"""
 
-    for scale in np.linspace(0.2, 1.0, 20)[::-1]:
-        resized = imutils.resize(cam, width=int(cam.shape[1] * scale))
-        r = cam.shape[1] / float(resized.shape[1])
-        if resized.shape[0] < tH or resized.shape[1] < tW:
-            break
-
-        # detect edges in the resized, grayscale image and apply template
-        # matching to find the template in the image
-        edged = cv2.Canny(resized, 50, 200)
-        result = cv2.matchTemplate(edged, reference, cv2.TM_CCOEFF)
-        (_, maxVal, _, maxLoc) = cv2.minMaxLoc(result)
-
-        # if we have found a new maximum correlation value, then update
-        # the bookkeeping variable
-        if found is None or maxVal > found[0]:
-            found = (maxVal, maxLoc, r)
-
-    return int(maxVal / 1000000)
+    orb = cv2.ORB_create()
+    des_org = list()
+    i = 1
+    # for every card in the input list, extract Keypoints and descriptors and list them.
+    for src in query_img:
+        _, des = orb.detectAndCompute(src, None)
+        des_org.append(des)
+        print("\r\tImage " + str(i) + "/" + str(len(query_img))),  # trailing comma to omit newline
+        i += 1
+    print "done!"
+    return des_org
 
 
 def cam_prepare(cam_if):
@@ -65,23 +54,64 @@ def cam_prepare(cam_if):
     cam = cv2.VideoCapture(cam_if)
     s, img = cam.read()
     if s:
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # grey colorscale
-        blur = cv2.GaussianBlur(gray, (5, 5), 0)
-        retval = cv2.Canny(blur, 50, 200)
-        return retval
+        pre = preprocess_image(img)
+        contours = find_card(pre)
+        extracted = extract_card(pre, contours)
+        return extracted
     else:
         return -1
 
 
-def card_matching(ref, cam):
+def cam_features(cam_img):
+    """Taking an Image from the cam and find its Keypoints and Descriptors
+    ---------------------------
+    IN: prepared camera image
+    OUT: Descriptors of taken image"""
+    orb = cv2.ORB_create()
+    _, des_cam = orb.detectAndCompute(cam_img, None)
+    return des_cam
+
+
+def card_matching(des_qry, des_cam):
     """Template match webcam-image against every card in query
     :param ref: list of prepared reference-images
     :param cam: prepared camera-image
     :return: Maximum score
     """
     score = 0
-    for ref_image in ref:
-        tmp_score = resize_match(ref_image, cam)
+    bf = cv2.BFMatcher(cv2.NORM_L1, crossCheck=False)
+    for des in des_qry:
+        # tmp_score = resize_match(ref_image, cam)
+        tmp_score = len(bf.match(des_cam, des))
         if tmp_score > score:
             score = tmp_score
     return score
+
+
+def preprocess_image(image):
+    """Returns a grayed, blurred, and adaptively thresholded camera image."""
+
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    blur = cv2.GaussianBlur(gray, (5, 5), 0)
+    retval, thresh = cv2.threshold(blur, 60, 255, cv2.THRESH_BINARY)
+    return thresh
+
+
+def find_card(pre_proc):
+    img, contours, hierarchy = cv2.findContours(pre_proc, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    return contours
+
+
+def extract_card(img, contour):
+    mask = np.zeros_like(img)  # Create mask where white is what we want, black otherwise
+
+    cv2.drawContours(mask, contour, 1, 255, -1)  # Draw filled contour in mask
+    out = np.zeros_like(img)  # Extract out the object and place into output image
+    out[mask == 255] = img[mask == 255]
+
+    # Now crop
+    (x, y) = np.where(mask == 255)
+    (topx, topy) = (np.min(x), np.min(y))
+    (bottomx, bottomy) = (np.max(x), np.max(y))
+    crop = out[topx:bottomx + 1, topy:bottomy + 1]
+    return crop

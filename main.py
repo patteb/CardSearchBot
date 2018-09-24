@@ -4,6 +4,8 @@
 
 from time import sleep
 
+import cv2
+
 import cardbot_serial
 import matching
 import setup
@@ -13,6 +15,7 @@ query, config, ser_if = setup.init()
 
 img_files = scryfall(config.url_pre, query)  # API-call, download images
 cv_img = matching.ref_prepare(img_files)  # prepare downloaded images
+des_ref = matching.ref_features(cv_img)
 
 setup.remove_temp(config.path)  # cleanup, delete card images
 
@@ -26,8 +29,13 @@ while True:
         sleep(1)
         print("Taking Picture."),
         cam_img = matching.cam_prepare(config.cam_if)
+        cv2.imshow("cam", cam_img)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+        print("Extracting features."),
+        des_cam = matching.cam_features(cam_img)
         print("Matching."),
-        img_match = matching.card_matching(cv_img, cam_img)
+        img_match = matching.card_matching(des_ref, des_cam)
         print("Score is %s." % img_match),
         if img_match > config.likely_match:
             matches_found += 1
