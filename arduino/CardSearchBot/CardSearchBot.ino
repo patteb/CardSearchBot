@@ -28,11 +28,9 @@ void loop() {
         response = check_empty();
         break;
       case SERIAL_MATCH: //match
-        response = true;
         response = sort(true);
         break;
       case SERIAL_NO_MATCH: //no match
-        response = true;
         response = sort(false);
         break;
     }
@@ -51,7 +49,6 @@ boolean feed() {
   else {
     feeder_servo.attach(FEED_PIN);
     feeder_servo.write(FEEDER_SPEED);
-    //delay(550);//MOCKUP for CNY70-Check
     while (!(check_cam())) delay(20);
     feeder_servo.detach();
     return true;
