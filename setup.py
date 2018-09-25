@@ -15,7 +15,7 @@ import cardbot_serial
 class configuration(object):
     url_pre = "https://api.scryfall.com/cards/search?unique=art&q="
     path = "temp"
-    likely_match = 700
+    likely_match = .3
     cam_if = 0
     serial_if = '/dev/ttymxc0'
     baud = 115200
@@ -30,7 +30,7 @@ class configuration(object):
         config_parse.read(self.file)
         self.url_pre = config_parse['Query']['url_pre']
         self.path = config_parse['Query']['path']
-        self.likely_match = int(config_parse['Matching']['likely_match'])
+        self.likely_match = float(config_parse['Matching']['likely_match'])
         self.cam_if = int(config_parse['Matching']['cam_interface'])
         self.serial_if = config_parse['Serial']['serial_interface']
         self.baud = config_parse['Serial']['baud']
@@ -77,7 +77,7 @@ def remove_temp(path):
 def init_parse():
     """ Initialising command-line parser, adding command line options"""
     parser = argparse.ArgumentParser(description='CardSearchBot. Search your cards.')
-    parser.add_argument('-s', '--search', default="Dream Stalker", help="Name of the card to search for")
+    parser.add_argument('-s', '--search', default="Jhoira", help="Name of the card to search for")
     # parser.add_argument('-s', '--search', default="Urza's Hot Tub", help="Name of the card to search for",
     # required=True)
     parser.add_argument('-c', '--config', default='config', help="Path to configuration file")
