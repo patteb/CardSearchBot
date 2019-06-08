@@ -6,11 +6,8 @@ from glob import glob
 
 import configparser
 
-import cardbot_serial
-
-
 # from sys import argv
-
+# TODO: change for i2c
 
 class configuration(object):
     url_pre = "https://api.scryfall.com/cards/search?unique=art&q="
@@ -61,10 +58,7 @@ def init():
     if not os.path.exists(config.path):
         os.makedirs(config.path)
 
-    # initialize serial connection to arduino
-    ser_if = cardbot_serial.init(config)
-
-    return query, config, ser_if
+    return query, config
 
 
 def remove_temp(path):

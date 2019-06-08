@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
 
-
-import cardbot_serial as cs
+import hardware
 import image_processing as imp
 import setup
 from scryfall import scryfall
@@ -15,11 +14,15 @@ cv_img = imp.ref_list(img_files)  # prepare downloaded images
 setup.remove_temp(config.path)  # cleanup, delete card images
 
 matches_found = 0
+
+# initalize hardware
+hw = hardware.hardware(config)
+
 # Enter container-mode
 while True:
     # Feed the first card
     print("Feeding next card."),
-    if cs.feed(ser_if):
+    if hw.feed():
         # Resolving the recorded image !!SIMULATED!!! drop "_dummy" 4 da real shit
         # sleep(.2)
         print("Taking Picture, extracting card."),
@@ -35,13 +38,12 @@ while True:
         quit()
 
     print("Sorting...")
-    if cs.sort(img_match > config.likely_match, ser_if):
+    if hw.sort(img_match > config.likely_match, ser_if):
         if (img_match > config.likely_match) and (config.max_matches is not None):
             if matches_found >= config.max_matches:
                 print ("Maximum matching cards found. %s matching cards found. Exiting." % matches_found)
                 quit()
         continue
-        sleep(1)
     else:
         print "Sorting Error! Exiting"
         quit()
