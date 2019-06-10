@@ -38,8 +38,8 @@ class configuration(object):
 def init():
     """Initialising any pre-existing conditions, like sys-argv or config file
     ---------------
-    IN: void
-    OUT: the query to search for (as given via argv), a configuration-object and a serial-interface-object
+    :param:: void
+    :return: the query to search for (as given via argv), a configuration-object and a serial-interface-object
     """
 
     # parsing input parameters

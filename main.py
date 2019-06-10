@@ -7,6 +7,7 @@ import setup
 from scryfall import scryfall
 
 query, config, ser_if = setup.init()
+hw = hardware.hardware(config) # initalize hardware
 
 img_files = scryfall(config.url_pre, query)  # API-call, download images
 cv_img = imp.ref_list(img_files)  # prepare downloaded images
@@ -14,10 +15,6 @@ cv_img = imp.ref_list(img_files)  # prepare downloaded images
 setup.remove_temp(config.path)  # cleanup, delete card images
 
 matches_found = 0
-
-# initalize hardware
-hw = hardware.hardware(config)
-
 # Enter container-mode
 while True:
     # Feed the first card

@@ -7,8 +7,8 @@ from urllib import urlopen, urlretrieve
 def build_query(pre, query):
     """Construct an url from the query
     ---------------------------
-    IN: url-pre-snippet from config, query
-    OUT: url to hand of to crawler"""
+    :param url-pre-snippet from config, query
+    :return: url to hand of to crawler"""
     print("Querying \"%s\" on scryfall." % query),
     return pre + query.replace(" ", "+")  # replace necessary for url-handling
 
@@ -17,8 +17,8 @@ def api_query(url):
     """run a query on scryfall and extract all card images
     API documentation @ https://scryfall.com/docs/api
     ---------------------------
-    IN: url of query (including query)
-    OUT: List of image url"""
+    :param url of query (including query)
+    :return: List of image url"""
     # retrieving JSON data
     req = urlopen(url)
     data = load(req)
@@ -40,8 +40,8 @@ def api_query(url):
 def card_download(matches):
     """"Download all card images from list, saving in temp-directory
     ---------------------------
-    IN: list of image urls
-    OUT: list of image files"""
+    :param list of image urls
+    :return: list of image files"""
     if len(matches) != 0:  # check card url list for existing urls
         print("%s matches found." % len(matches))
         print("Downloading images...")
@@ -64,8 +64,8 @@ def card_download(matches):
 def scryfall(url_pre, query):
     """Combine function to build query, do the API-call and download images
     ---------------------------
-    IN: url-pre-snippet from config, query
-    OUT: list of image files"""
+    :param url_pre-snippet from config, query
+    :return: list of image files"""
     url = build_query(url_pre, query)  # construct query url
     img_url = api_query(url)  # API-Call
     return card_download(img_url)  # download images
