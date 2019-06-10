@@ -18,8 +18,8 @@ class configuration(object):
     thresh = 512
     Servo = 0x40
     servo_speed = 512
-    sort_pin = 0
-    feed_pin = 1
+    sort_ch = 0
+    feed_ch = 1
     max_matches = None
 
     def __init__(self, file):
@@ -37,8 +37,8 @@ class configuration(object):
         self.thresh = int(config_parse['hardware']['thresh'])
         self.Servo = hex(config_parse['hardware']['Servo'])
         self.servo_speed = int(config_parse['hardware']['servo_speed'])
-        self.sort_pin = int(config_parse['hardware']['sort_pin'])
-        self.feed_pin = int(config_parse['hardware']['feed_pin'])
+        self.sort_ch = int(config_parse['hardware']['sort_channel'])
+        self.feed_ch = int(config_parse['hardware']['feed_channel'])
         self.max_matches = None
 
 

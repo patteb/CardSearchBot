@@ -14,5 +14,5 @@ ADC = 0x48
 thresh = 512
 Servo = 0x40
 servo_speed = 512
-sort_pin = 0
-feed_pin = 1
+sort_channel = 0
+feed_channel = 1

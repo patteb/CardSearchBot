@@ -43,12 +43,12 @@ class Magazine:
         self.pin = config.gpio
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.pin, GPIO.IN)
-        self.state = True if (GPIO.input(self.pin) == 1) else self.state = False
+        self.state = True if (GPIO.input(self.pin) == 1) else False
 
     def check_empty(self):
         """check if container is empty via gpio-attached switch
         :return: state of the magazine switch"""
-        self.state = True if (GPIO.input(self.pin) == 1) else self.state = False
+        self.state = True if (GPIO.input(self.pin) == 1) else False
         return self.state
 
 
@@ -79,9 +79,9 @@ class Servo:
         self.speed = int(config.servo_speed)
 
         if SortOrFeed:
-            self.pin = int(config.sort_pin)
+            self.channel = int(config.sort_pin)
         else:
-            self.pin = int(config.feed_pin)
+            self.channel = int(config.feed_pin)
 
     def set_speed(self, speed):
         self.speed = speed
