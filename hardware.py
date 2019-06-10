@@ -4,13 +4,13 @@ import RPi.GPIO as GPIO
 import smbus
 
 
-class hardware:
+class Hardware:
     def __init__(self, config):
         self.i2c = smbus.SMBus(1)
         self.adc = ADC(config, self.i2c)
         self.sorter = Servo(config, self.i2c, True)
         self.feeder = Servo(config, self.i2c, False)
-        self.magazine = magazine(config)
+        self.magazine = Magazine(config)
 
     def query_feed(self):
         return self.magazine.check_empty()
@@ -34,7 +34,7 @@ class hardware:
         return True
 
 
-class magazine:
+class Magazine:
     state = False
 
     def __init__(self, config):

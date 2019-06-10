@@ -7,16 +7,19 @@ from glob import glob
 import configparser
 
 # from sys import argv
-# TODO: change for i2c
 
 class configuration(object):
     url_pre = "https://api.scryfall.com/cards/search?unique=art&q="
     path = "temp"
     likely_match = .3
     cam_if = 0
-    serial_if = '/dev/ttymxc0'
-    baud = 115200
-    timeout = 3
+    GPIO = 18
+    ADC = 0x48
+    thresh = 512
+    Servo = 0x40
+    servo_speed = 512
+    sort_pin = 0
+    feed_pin = 1
     max_matches = None
 
     def __init__(self, file):
@@ -29,9 +32,13 @@ class configuration(object):
         self.path = config_parse['Query']['path']
         self.likely_match = float(config_parse['Matching']['likely_match'])
         self.cam_if = int(config_parse['Matching']['cam_interface'])
-        self.serial_if = config_parse['Serial']['serial_interface']
-        self.baud = config_parse['Serial']['baud']
-        self.timeout = int(config_parse['Serial']['timeout'])
+        self.GPIO = int(config_parse['hardware']['GPIO'])
+        self.ADC = hex(config_parse['hardware']['ADC'])
+        self.thresh = int(config_parse['hardware']['thresh'])
+        self.Servo = hex(config_parse['hardware']['Servo'])
+        self.servo_speed = int(config_parse['hardware']['servo_speed'])
+        self.sort_pin = int(config_parse['hardware']['sort_pin'])
+        self.feed_pin = int(config_parse['hardware']['feed_pin'])
         self.max_matches = None
 
 

@@ -8,9 +8,11 @@ path = temp
 likely_match = 30
 cam_interface = 0
 
-[Serial]
-#serial_interface = /dev/ttymxc0
-serial_interface = COM4
-
-baud = 115200
-timeout = 3
+[hardware]
+GPIO = 18
+ADC = 0x48
+thresh = 512
+Servo = 0x40
+servo_speed = 512
+sort_pin = 0
+feed_pin = 1

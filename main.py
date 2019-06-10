@@ -7,7 +7,7 @@ import setup
 from scryfall import scryfall
 
 query, config, ser_if = setup.init()
-hw = hardware.hardware(config) # initalize hardware
+hw = hardware.Hardware(config) # initalize hardware
 
 img_files = scryfall(config.url_pre, query)  # API-call, download images
 cv_img = imp.ref_list(img_files)  # prepare downloaded images
