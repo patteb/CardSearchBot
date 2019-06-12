@@ -35,7 +35,7 @@ while True:
         quit()
 
     print("Sorting...")
-    if hw.sort(img_match > config.likely_match, ser_if):
+    if hw.sort(img_match > config.likely_match):
         if (img_match > config.likely_match) and (config.max_matches is not None):
             if matches_found >= config.max_matches:
                 print ("Maximum matching cards found. %s matching cards found. Exiting." % matches_found)
