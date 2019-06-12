@@ -72,6 +72,7 @@ class ADC:
 
 
 class Servo:
+    # led[0]['ON']['HIGH']
     # TODO:register etc
     def __init__(self, config, bus, SortOrFeed):
         self.adr = hex(config.Servo)  # probably 0x40
