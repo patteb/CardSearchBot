@@ -1,0 +1,1 @@
+- change default pwm freq to 122 (0x7A) for more accurate approximation of 20ms period
